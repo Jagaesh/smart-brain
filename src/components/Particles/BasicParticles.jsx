@@ -1,4 +1,4 @@
-
+import './BasicParticles.css'
 
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { useEffect, useMemo, useState } from "react";
@@ -38,12 +38,12 @@ const BasicParticles = (props) => {
       interactivity: {
         events: {
           onClick: {
-            enable: true,
-            mode: "repulse",
+            enable: false,
+            // mode: "repulse",
           },
           onHover: {
-            enable: true,
-            mode: "grab",
+            enable: false,
+            // mode: "grab",
           },
         },
         modes: {
@@ -64,7 +64,7 @@ const BasicParticles = (props) => {
           color: "#FFFFFF",
           distance: 150,
           enable: true,
-          opacity: 0.3,
+          opacity: 0.6,
           width: 1,
         },
         move: {
@@ -99,7 +99,12 @@ const BasicParticles = (props) => {
   );
 
 
-  return <Particles id={props.id} init={particlesLoaded} options={options} />;
+  return (
+    <div className="basicparticles">
+      <Particles id={props.id} init={particlesLoaded} options={options} />
+    </div>
+  );
+
 };
 
 export default BasicParticles;
