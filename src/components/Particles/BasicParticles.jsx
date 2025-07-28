@@ -34,11 +34,6 @@ const BasicParticles = (props) => {
 
   const options = useMemo(
     () => ({
-      background: {
-        color: {
-          value: "#1E2F97",
-        },
-      },
       fpsLimit: 120,
       interactivity: {
         events: {
@@ -48,7 +43,7 @@ const BasicParticles = (props) => {
           },
           onHover: {
             enable: true,
-            mode: 'grab',
+            mode: "grab",
           },
         },
         modes: {
