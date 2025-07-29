@@ -6,6 +6,7 @@ import Navigation from './components/Navigation/Navigation'
 import Logo from './components/Logo/Logo'
 import Rank from './components/Rank/Rank'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
+import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import './App.css'
 
 
@@ -14,19 +15,23 @@ import './App.css'
 // of the image we want as an input.Change these strings to run your own example.
 // ////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Your PAT (Personal Access Token) can be found in the Account's Security section
+const PAT = 'dd8d4919a3c048f68411e5d7d2f0ef09';
+// Specify the correct user_id/app_id pairings
+// Since you're making inferences outside your app's scope
+const USER_ID = 'jagaesh';
+const APP_ID = 'smartbrain-face-detection';
+// Change these to whatever model and image URL you want to use
+const MODEL_ID = 'face-detection';
+// const MODEL_ID = 'color-recognition';
+const MODEL_VERSION_ID = '6dc7e46bc9124c5c8824be4822abe105';
+// const MODEL_VERSION_ID = 'dd9458324b4b45c2be1a7ba84d27cd04';
+const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
+const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
+
+
 const buildClarifaiRequestOptions = (imageUrl) => {
-  // Your PAT (Personal Access Token) can be found in the Account's Security section
-  const PAT = 'dd8d4919a3c048f68411e5d7d2f0ef09';
-  // Specify the correct user_id/app_id pairings
-  // Since you're making inferences outside your app's scope
-  const USER_ID = 'jagaesh';
-  const APP_ID = 'smartbrain-face-detection';
-  // Change these to whatever model and image URL you want to use
-  const MODEL_ID = 'face-detection';
-  const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
   // const IMAGE_URL = imageUrl;
-  // To use image bytes, assign its variable   
-  // const IMAGE_BYTES_STRING = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAoACgDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAYDBQcE/8QAMBAAAQMDAwMDAgQHAAAAAAAAAQIDBAAFEQYSIQcTMTJBURRhCBYikSNScXKhsdH/xAAZAQACAwEAAAAAAAAAAAAAAAAFBgIDBAf/xAAtEQABAwMBBgQHAQAAAAAAAAABAgMRAAQhMQUSE0FRYQaBocEUFiJCcrHR8P/aAAwDAQACEQMRAD8A3+RYY1unSYzCS0ttZUkAgktn0q5yT7jPyDUC4wdGwycH5U2Kt9ZQ7VI1qw5PkvQy3CSVPpf7aQjuKyFH25xzn3pHn3TVNy01Hl2hyy6YdkSpKsS9sl/6RlI3rRu3dxWd6spwnAGPIJTfl925fcLaoSDHXvyo6i9SlCQrU9wKln3OyWiaDN1RAbW3kKbSd7gPtwMkH/tTWy9afuy1iPfnXMAblITwkE4yf08cn3pSbYt1uts24XH6fUbiLAuY1MWyGkLEmUW0rcCRvUpQ5CtwKQCPgi4S1ZbDe4sd9NntDEe79m3uOBLTr0IR9jzodSMqUpTu9JJ8owD7UTT4ZCfv9PbP7860m+s+HBSrejWRuz2kAxoesGYxTW/Zlpkwo1vkuSly3UgKWQUhHJUvIHsAaKTemF8XE6sWmxyZkiaZrMh1jv8ArQNpUVqB8FW0njHqx4zRVVhsph1KlKk5xQ+7uHmikaSJrQerMByet2IwvtuTLa4xv2k7Rk84H9x/esHv92d01boenLXGcuiWrFIhLlpbcaQ2/JdK3VJCkAq2pAR7Zz7YxWudY9fxNIdQbNGkR5TyX4aisNNpUMFZAzkj4NK0jq9ZpbLr0PSlzkhrlZDaQlP3P8Q4/ap3F87bPucJEkx/hHv60b2TYXLrKN5sramYECSQRk9M6c6zmJ+eb5Hi22M7cnWGIQgFLbX0zSo4PDa1YBcTgDyMjJ/qbGPabH08SJt1Uzc9QqRliGg5QySPKvgc+TyfYDmmTUWpNYz7ctxoQdPQshCktupckDJUPUcJT6DwMq8YyaQ9VL0pCS8zapcq4SVOBZmPDO8/cnknlWcDBwn4NYnPjLkQ+qE9OtOVlYpeVHDCEkkkJyT+SuQzy5Y0ru6Ez511/Efa5s1fdkOtyVurIxgdlQAA9gOKKPwolU7remU5hCGYEgo38KUv9I/0TRTDYJCWQBSF4rIN/CRgAR0iTpVD1j1g/qDqJcJqlKcjB9bcda142MpOEJAzgeMnjyTSyze5KEuNRpDoDvC0oe4X9iAeaKKFK+oya6fbOqYbDTeEiAPKpHdS3gBLYc7RQkp3ApQog+cq8nwPJrljzxnPZbUfnugn/NFFRgEVch9xKsH0H8pg6e3x3T3UC1ajaZITGkJLoS4MKbOUrzz/ACKVRRRVzVwtoQmhG1NkWu0HuI+JI8u/Kv/Z';
 
   const raw = JSON.stringify({
     "user_app_id": {
@@ -37,7 +42,7 @@ const buildClarifaiRequestOptions = (imageUrl) => {
       {
         "data": {
           "image": {
-            "url": IMAGE_URL
+            "url": imageUrl
             // "base64": IMAGE_BYTES_STRING
           }
         }
@@ -45,14 +50,16 @@ const buildClarifaiRequestOptions = (imageUrl) => {
     ]
   });
 
-  return {
+  const requestOptions = {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Authorization': 'Key ' + PAT
     },
     body: raw
-  }
+  };
+
+  return requestOptions
 }
 
 
@@ -61,40 +68,51 @@ class App extends Component {
     super();
     this.state = {
       input: '',
+      imageUrl: '',
+      box: {}
     }
   }
 
+  calculateFaceLocation = (result) => {
+
+    const image = document.getElementById('input-image');
+    const width = Number(image.width);
+    const height = Number(image.height);
+
+    const regions = result.outputs[0].data.regions;
+
+    const faceBoxes = regions.map(region => {
+      // Accessing and rounding the bounding box values
+      const boundingBox = region.region_info.bounding_box;
+      return {
+        topRow: boundingBox.top_row * height,
+        leftCol: boundingBox.left_col * width,
+        bottomRow: height * (1 - boundingBox.bottom_row),
+        rightCol: width * (1 - boundingBox.right_col)
+      }
+    });
+
+    return faceBoxes[0];
+  }
+
+  loadFaceBox(box) {
+    this.setState({ box: box });
+  }
+
   onInputChange = (event) => {
-    console.log(event.target.value);
+    this.setState({ input: event.target.value });
   }
 
   onButtonSubmit = () => {
-    fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", buildClarifaiRequestOptions(this.state.input))
+    this.setState({ imageUrl: this.state.input });
+
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const clarifaiUrl = `https://api.clarifai.com/v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`;
+    const requestOptions = buildClarifaiRequestOptions(this.state.input);
+
+    fetch(proxyUrl + clarifaiUrl, requestOptions)
       .then(response => response.json())
-      .then(result => {
-
-        console.log(result);
-        const regions = result.outputs[0].data.regions;
-
-        regions.forEach(region => {
-          // Accessing and rounding the bounding box values
-          const boundingBox = region.region_info.bounding_box;
-          const topRow = boundingBox.top_row.toFixed(3);
-          const leftCol = boundingBox.left_col.toFixed(3);
-          const bottomRow = boundingBox.bottom_row.toFixed(3);
-          const rightCol = boundingBox.right_col.toFixed(3);
-
-          region.data.concepts.forEach(concept => {
-            // Accessing and rounding the concept value
-            const name = concept.name;
-            const value = concept.value.toFixed(4);
-
-            console.log(`${name}: ${value} BBox: ${topRow}, ${leftCol}, ${bottomRow}, ${rightCol}`);
-
-          });
-        });
-
-      })
+      .then(result => this.loadFaceBox(this.calculateFaceLocation(result)))
       .catch(error => console.log('error', error));
   }
 
@@ -106,7 +124,7 @@ class App extends Component {
         <Logo />
         <Rank />
         <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
-        {/* <FaceRecognition /> */}
+        <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box} />
       </div>
     )
   }
