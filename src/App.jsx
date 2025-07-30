@@ -78,7 +78,6 @@ class App extends Component {
         id: '',
         name: '',
         email: '',
-        password: '',
         entries: 0,
         joined: ''
       }
@@ -144,18 +143,34 @@ class App extends Component {
 
     fetch(proxyUrl + clarifaiUrl, requestOptions)
       .then(response => response.json())
-      .then(result => this.loadFaceBox(this.calculateFaceLocation(result)))
+      .then(result => {
+        if (result) {
+          fetch('http://localhost:3000/image', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+          })
+            .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, { entries: count }));
+            })
+          this.loadFaceBox(this.calculateFaceLocation(result));
+        }
+      })
       .catch(error => console.log('error', error));
   }
 
   render() {
-    const { isSignedIn, route, imageUrl, box } = this.state;
+    const { isSignedIn, route, imageUrl, box, user } = this.state;
     let PageComponent;
 
     switch (route) {
       case 'signout':
       case 'signin':
         PageComponent = <SignIn
+          loadUser={this.loadUser}
           onRouteChange={this.onRouteChange}
         />;
         break;
@@ -169,7 +184,10 @@ class App extends Component {
         PageComponent = (
           <>
             <Logo />
-            <Rank />
+            <Rank
+              name={user.name}
+              entries={user.entries}
+            />
             <ImageLinkForm
               onInputChange={this.onInputChange}
               onButtonSubmit={this.onButtonSubmit}
