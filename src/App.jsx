@@ -73,7 +73,15 @@ class App extends Component {
       imageUrl: '',
       box: {},
       route: 'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        password: '',
+        entries: 0,
+        joined: ''
+      }
     }
   }
 
@@ -100,6 +108,18 @@ class App extends Component {
 
   loadFaceBox(box) {
     this.setState({ box: box });
+  }
+
+  loadUser = (data) => {
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined
+      }
+    });
   }
 
   onRouteChange = (route) => {
@@ -135,10 +155,15 @@ class App extends Component {
     switch (route) {
       case 'signout':
       case 'signin':
-        PageComponent = <SignIn onRouteChange={this.onRouteChange} />;
+        PageComponent = <SignIn
+          onRouteChange={this.onRouteChange}
+        />;
         break;
       case 'register':
-        PageComponent = <Register onRouteChange={this.onRouteChange} />;
+        PageComponent = <Register
+          loadUser={this.loadUser}
+          onRouteChange={this.onRouteChange}
+        />;
         break;
       default:
         PageComponent = (
