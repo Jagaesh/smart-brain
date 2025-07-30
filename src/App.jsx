@@ -78,7 +78,6 @@ class App extends Component {
   }
 
   calculateFaceLocation = (result) => {
-
     const image = document.getElementById('input-image');
     const width = Number(image.width);
     const height = Number(image.height);
