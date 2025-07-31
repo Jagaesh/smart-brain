@@ -17,52 +17,46 @@ import './App.css'
 // of the image we want as an input.Change these strings to run your own example.
 // ////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Your PAT (Personal Access Token) can be found in the Account's Security section
-const PAT = 'dd8d4919a3c048f68411e5d7d2f0ef09';
-// Specify the correct user_id/app_id pairings
-// Since you're making inferences outside your app's scope
-const USER_ID = 'jagaesh';
-const APP_ID = 'smartbrain-face-detection';
-// Change these to whatever model and image URL you want to use
-const MODEL_ID = 'face-detection';
-// const MODEL_ID = 'color-recognition';
-const MODEL_VERSION_ID = '6dc7e46bc9124c5c8824be4822abe105';
-// const MODEL_VERSION_ID = 'dd9458324b4b45c2be1a7ba84d27cd04';
-const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
-const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
+// // Your PAT (Personal Access Token) can be found in the Account's Security section
+// const PAT = 'dd8d4919a3c048f68411e5d7d2f0ef09';
+// // Specify the correct user_id/app_id pairings
+// const USER_ID = 'jagaesh';
+// const APP_ID = 'smartbrain-face-detection';
+// // Change these to whatever model and image URL you want to use
+// const MODEL_ID = 'face-detection';
+// const MODEL_VERSION_ID = '6dc7e46bc9124c5c8824be4822abe105';
+// const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
+// const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
 
 
-const buildClarifaiRequestOptions = (imageUrl) => {
-  // const IMAGE_URL = imageUrl;
+// const buildClarifaiRequestOptions = (imageUrl) => {
+//   const raw = JSON.stringify({
+//     "user_app_id": {
+//       "user_id": USER_ID,
+//       "app_id": APP_ID
+//     },
+//     "inputs": [
+//       {
+//         "data": {
+//           "image": {
+//             "url": imageUrl
+//           }
+//         }
+//       }
+//     ]
+//   });
 
-  const raw = JSON.stringify({
-    "user_app_id": {
-      "user_id": USER_ID,
-      "app_id": APP_ID
-    },
-    "inputs": [
-      {
-        "data": {
-          "image": {
-            "url": imageUrl
-            // "base64": IMAGE_BYTES_STRING
-          }
-        }
-      }
-    ]
-  });
+//   const requestOptions = {
+//     method: 'POST',
+//     headers: {
+//       'Accept': 'application/json',
+//       'Authorization': 'Key ' + PAT
+//     },
+//     body: raw
+//   };
 
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Key ' + PAT
-    },
-    body: raw
-  };
-
-  return requestOptions
-}
+//   return requestOptions
+// }
 
 
 class App extends Component {
@@ -137,11 +131,13 @@ class App extends Component {
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
 
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const clarifaiUrl = `https://api.clarifai.com/v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`;
-    const requestOptions = buildClarifaiRequestOptions(this.state.input);
-
-    fetch(proxyUrl + clarifaiUrl, requestOptions)
+    fetch('http://localhost:3000/clarifai', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        imageUrl: this.state.input
+      })
+    })
       .then(response => response.json())
       .then(result => {
         if (result) {
