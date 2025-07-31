@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useCallback } from 'react'
 import { calculateFaceLocation } from './services/faceUtils'
 import { fetchFaceDetection, updateUserEntries } from './services/api';
-import BasicParticles from './components/Particles/BasicParticles'
 import Navigation from './components/Navigation/Navigation'
 import SignIn from './components/SignIn/SignIn'
 import Register from './components/Register/Register'
@@ -121,7 +120,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        <BasicParticles />
         <Navigation
           isSignedIn={isSignedIn}
           onRouteChange={this.onRouteChange}
