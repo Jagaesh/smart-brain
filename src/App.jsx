@@ -10,30 +10,18 @@ import Logo from './components/Logo/Logo'
 import Rank from './components/Rank/Rank'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
+import getInitialState from './state/initialState'
 import './App.css'
 
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = getInitialState();
   }
 
   loadFaceBox(box) {
-    this.setState({ box: box });
+    this.setState({ box });
   }
 
   loadUser = (data) => {
@@ -50,11 +38,12 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({ isSignedIn: false })
+      this.setState(getInitialState());
     } else if (route === 'home') {
-      this.setState({ isSignedIn: true })
+      this.setState({ route: 'home', isSignedIn: true });
+    } else {
+      this.setState({ route });
     }
-    this.setState({ route: route });
   }
 
   onInputChange = (event) => {
@@ -77,7 +66,7 @@ class App extends Component {
             })
         }
       })
-      .catch(error => console.log('error', error));
+      .catch(console.log);
   }
 
   render() {
@@ -87,43 +76,25 @@ class App extends Component {
     switch (route) {
       case 'signout':
       case 'signin':
-        PageComponent = <SignIn
-          loadUser={this.loadUser}
-          onRouteChange={this.onRouteChange}
-        />;
+        PageComponent = <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />;
         break;
       case 'register':
-        PageComponent = <Register
-          loadUser={this.loadUser}
-          onRouteChange={this.onRouteChange}
-        />;
+        PageComponent = <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />;
         break;
       default:
         PageComponent = (
           <>
             <Logo />
-            <Rank
-              name={user.name}
-              entries={user.entries}
-            />
-            <ImageLinkForm
-              onInputChange={this.onInputChange}
-              onButtonSubmit={this.onButtonSubmit}
-            />
-            <FaceRecognition
-              imageUrl={imageUrl}
-              box={box}
-            />
+            <Rank name={user.name} entries={user.entries} />
+            <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
+            <FaceRecognition imageUrl={imageUrl} box={box} />
           </>
         );
     }
 
     return (
       <div className="App">
-        <Navigation
-          isSignedIn={isSignedIn}
-          onRouteChange={this.onRouteChange}
-        />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
         {PageComponent}
       </div>
     );
