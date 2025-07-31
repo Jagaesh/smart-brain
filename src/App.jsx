@@ -63,16 +63,19 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
-    this.setState({ imageUrl: this.state.input });
+    const { input, user } = this.state;
 
-    fetchFaceDetection(this.state.input)
+    fetchFaceDetection(input)
       .then(result => {
         if (result) {
-          updateUserEntries(this.state.user.id)
+          updateUserEntries(user.id)
             .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count }));
+              this.setState(prevState => ({
+                imageUrl: input,
+                box: calculateFaceLocation(result),
+                user: { ...prevState.user, entries: count }
+              }));
             })
-          this.loadFaceBox(calculateFaceLocation(result));
         }
       })
       .catch(error => console.log('error', error));

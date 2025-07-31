@@ -101,11 +101,14 @@ const BasicParticles = (props) => {
 
   return (
     <div className="basicparticles">
-      <Particles id={props.id} init={particlesLoaded} options={options} />
+      <Particles
+        id={props.id}
+        init={particlesLoaded}
+        options={options}
+      />
     </div>
   );
 
 };
 
-export default BasicParticles;
-
+export default BasicParticles
