@@ -1,7 +1,7 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchFaceDetection = (imageUrl) => {
-  return fetch(`${BASE_URL}/api`, {
+  return fetch(`${API_URL}/api`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ imageUrl })
@@ -19,7 +19,7 @@ export const fetchFaceDetection = (imageUrl) => {
 };
 
 export const updateUserEntries = (userId) => {
-  return fetch(`${BASE_URL}/image`, {
+  return fetch(`${API_URL}/image`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId })

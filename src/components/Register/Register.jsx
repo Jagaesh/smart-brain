@@ -1,5 +1,7 @@
 import React from 'react';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +25,7 @@ class Register extends React.Component {
   }
 
   onSubmitRegister = () => {
-    fetch('http://localhost:3000/register', {
+    fetch(`${API_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
