@@ -1,7 +1,7 @@
 const BASE_URL = 'http://localhost:3000';
 
 export const fetchFaceDetection = (imageUrl) => {
-  return fetch(`${BASE_URL}/clarifai`, {
+  return fetch(`${BASE_URL}/api`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ imageUrl })

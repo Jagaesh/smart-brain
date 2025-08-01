@@ -20,20 +20,9 @@ class App extends Component {
     this.state = getInitialState();
   }
 
-  loadFaceBox(box) {
-    this.setState({ box });
-  }
-
   loadUser = (data) => {
-    this.setState({
-      user: {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        entries: data.entries,
-        joined: data.joined
-      }
-    });
+    const { id, name, email, entries, joined } = data;
+    this.setState({ user: { id, name, email, entries, joined } });
   }
 
   onRouteChange = (route) => {
