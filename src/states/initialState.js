@@ -1,7 +1,8 @@
 const getInitialState = () => ({
   input: '',
   imageUrl: '',
-  box: {},
+  boxes: [],
+  pendingData: null,
   route: 'signin',
   isSignedIn: false,
   user: {

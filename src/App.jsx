@@ -39,18 +39,29 @@ class App extends Component {
     this.setState({ input: event.target.value });
   }
 
+  onImageLoad = () => {
+    const { pendingRegions } = this.state;
+    if (pendingRegions) {
+      this.setState({
+        boxes: calculateFaceLocation(pendingRegions)
+      });
+    }
+  }
+
   onButtonSubmit = () => {
     const { input, user } = this.state;
 
     fetchFaceDetection(input)
-      .then(result => {
-        if (result) {
+      .then(data => {
+        const regions = data?.outputs?.[0]?.data?.regions || [];
+        if (regions.length > 0) {
           updateUserEntries(user.id)
             .then(count => {
               this.setState(prevState => ({
                 imageUrl: input,
-                box: calculateFaceLocation(result),
-                user: { ...prevState.user, entries: count }
+                boxes: [],
+                pendingRegions: regions,
+                user: { ...prevState.user, entries: count },
               }));
             })
         }
@@ -59,7 +70,7 @@ class App extends Component {
   }
 
   render() {
-    const { isSignedIn, route, imageUrl, box, user } = this.state;
+    const { isSignedIn, route, imageUrl, boxes, user } = this.state;
     let PageComponent;
 
     switch (route) {
@@ -76,7 +87,7 @@ class App extends Component {
             <Logo />
             <Rank name={user.name} entries={user.entries} />
             <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
-            <FaceRecognition imageUrl={imageUrl} box={box} />
+            <FaceRecognition imageUrl={imageUrl} boxes={boxes} onImageLoad={this.onImageLoad} />
           </>
         );
     }

@@ -1,10 +1,9 @@
-export const calculateFaceLocation = (result) => {
+export const calculateFaceLocation = (regions) => {
   const image = document.getElementById('input-image');
-  if (!image || !result?.outputs?.[0]?.data?.regions) return [];
+  if (!image || !regions) return [];
 
   const width = Number(image.width);
   const height = Number(image.height);
-  const regions = result.outputs[0].data.regions;
 
   return regions.map(region => {
     const boundingBox = region.region_info.bounding_box;
@@ -14,5 +13,5 @@ export const calculateFaceLocation = (result) => {
       bottomRow: height * (1 - boundingBox.bottom_row),
       rightCol: width * (1 - boundingBox.right_col)
     };
-  })[0];
+  });
 };
