@@ -52,19 +52,15 @@ class App extends Component {
     const { input, user } = this.state;
 
     fetchFaceDetection(input)
-      .then(data => {
-        const regions = data?.outputs?.[0]?.data?.regions || [];
-        if (regions.length > 0) {
-          updateUserEntries(user.id)
-            .then(count => {
-              this.setState(prevState => ({
-                imageUrl: input,
-                boxes: [],
-                pendingRegions: regions,
-                user: { ...prevState.user, entries: count },
-              }));
-            })
-        }
+      .then(regions => {
+        updateUserEntries(user.id)
+          .then(count => {
+            this.setState(prevState => ({
+              imageUrl: input,
+              pendingRegions: regions,
+              user: { ...prevState.user, entries: count },
+            }));
+          })
       })
       .catch(console.log);
   }
