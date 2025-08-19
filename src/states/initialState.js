@@ -2,7 +2,7 @@ const getInitialState = () => ({
   input: '',
   imageUrl: '',
   boxes: [],
-  pendingData: null,
+  pendingRegions: [],
   route: 'signin',
   isSignedIn: false,
   user: {

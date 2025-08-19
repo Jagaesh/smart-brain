@@ -41,9 +41,10 @@ class App extends Component {
 
   onImageLoad = () => {
     const { pendingRegions } = this.state;
-    if (pendingRegions) {
+    if (pendingRegions.length > 0) {
       this.setState({
-        boxes: calculateFaceLocation(pendingRegions)
+        boxes: calculateFaceLocation(pendingRegions),
+        pendingRegions: []
       });
     }
   }
